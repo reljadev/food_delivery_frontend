@@ -60,7 +60,7 @@ export default {
             const userId = this.parseJwt(token).sub;
             
             // Use Axios to make a call to the API
-            let requestURL = "http://localhost:8080/users/" + encodeURIComponent(userId) + "/orders";
+            let requestURL = "http://54.90.216.66:8080/users/" + encodeURIComponent(userId) + "/orders";
             let config = {
                       headers: {
                         Authorization: "Bearer " + token

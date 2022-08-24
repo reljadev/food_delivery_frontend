@@ -82,7 +82,7 @@ export default {
 		}
 	},
 	async mounted() {
-		const response = await axios.get("http://localhost:8080/restaurants/" + this.$route.params.id + "/meals");
+		const response = await axios.get("http://54.90.216.66:8080/restaurants/" + this.$route.params.id + "/meals");
 
 		//TODO: Is it a good idea to do this here? Maybe in computed?
 		for(let i in response.data) {

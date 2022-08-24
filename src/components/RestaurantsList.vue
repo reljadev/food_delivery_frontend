@@ -55,7 +55,7 @@ export default {
   methods: {
     async fetchRestaurantsByCityId(id) {
       // Use Axios to make a call to the API
-      const response = await axios.get("http://localhost:8080/cities/" + id + "/restaurants");
+      const response = await axios.get("http://54.90.216.66:8080/cities/" + id + "/restaurants");
       this.restaurants = response.data;
     }
   },
