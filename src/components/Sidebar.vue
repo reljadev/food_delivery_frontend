@@ -87,7 +87,7 @@ export default {
       const token = await this.$auth.getTokenSilently();
 
       // Use Axios to make a call to the API
-      let requestURL = "http://apifooddelivery.tk/orders/";
+      let requestURL = "https://apifooddelivery.tk/orders/";
       
       let order = {};
       for(let mealId in this.cart_meals) {

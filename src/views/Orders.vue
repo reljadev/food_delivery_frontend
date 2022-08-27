@@ -60,7 +60,7 @@ export default {
             const userId = this.parseJwt(token).sub;
             
             // Use Axios to make a call to the API
-            let requestURL = "http://apifooddelivery.tk/users/" + encodeURIComponent(userId) + "/orders";
+            let requestURL = "https://apifooddelivery.tk/users/" + encodeURIComponent(userId) + "/orders";
             let config = {
                       headers: {
                         Authorization: "Bearer " + token

@@ -28,7 +28,7 @@ export default {
     }
   },
   mounted: async function() {
-    const response = await axios.get('http://apifooddelivery.tk/cities');
+    const response = await axios.get('https://apifooddelivery.tk/cities');
     this.cities = response.data;
   },
 }
