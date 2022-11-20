@@ -10,6 +10,8 @@ import { faHouse, faArrowRight, faCartShopping } from '@fortawesome/free-solid-s
 // auth0
 import { domain, clientId, audience } from '../auth_config.json';
 import { Auth0Plugin } from './auth';
+// store
+import store from "./store";
 
 // fontawesome icons
 library.add(faHouse, faArrowRight, faCartShopping);
@@ -33,5 +35,6 @@ Vue.use(Auth0Plugin, {
 
 new Vue({
   router,
+  store,
   render: function (h) { return h(App) },
 }).$mount('#app');

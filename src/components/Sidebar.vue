@@ -53,14 +53,17 @@
 
 <script>
 import axios from 'axios';
-import store from '../store.js';
+import { mapState } from "vuex";
 
 export default {
   props: ['toggle'],
   data() {
-    return {
-      cart_meals: store.cart_meals
-    }
+    return {}
+  },
+  computed: {
+    ...mapState({
+      cart_meals: (state) => state.cart_meals
+    })
   },
   methods: {
     calculateTotal () {
@@ -75,7 +78,7 @@ export default {
       return total.toFixed(2);
     },
     removeMeal(mealId) {
-      this.$delete(this.cart_meals, mealId);
+      this.$store.commit("deleteMeal", mealId);
     },
     async orderMeals() {
       // user has to be logged in to order food
@@ -102,7 +105,7 @@ export default {
 
       // clear shopping cart
       for(let mealId in this.cart_meals) {
-        this.$delete(this.cart_meals, mealId);
+        this.$store.commit("deleteMeal", mealId);
       }
 
       // place an order
@@ -166,28 +169,6 @@ export default {
 .cart-remove {
   padding: 0px 7px;
   font-size: 20px; }
-
-/* iconft */
-/* @font-face {
-  font-family: "IcoFont";
-  font-style: "Regular";
-  font-weight: normal;
-  src: url("../assets/fonts/icofont.eot");
-  src: url("../assets/fonts/icofont.eot?#iefix") format("embedded-opentype"), url("../assets/fonts/icofont.woff2") format("woff2"), url("../assets/fonts/icofont.woff") format("woff"), url("../assets/fonts/icofont.ttf") format("truetype"), url("../assets/fonts/icofont.svg#icofont") format("svg");
-}
-[class^=icofont-],
-[class*=" icofont-"] {
-  direction: ltr;
-  font-family: "IcoFont" !important;
-  font-style: normal;
-  font-variant: normal;
-  font-weight: normal;
-  line-height: 1;
-  text-transform: none;
-  white-space: nowrap;
-  word-wrap: normal;
-  -webkit-font-smoothing: antialiased;
-} */
 
 .icofont-cart-alt:before {
   content: "\eed1";

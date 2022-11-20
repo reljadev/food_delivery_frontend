@@ -62,7 +62,7 @@
 
 <script>
 import Sidebar from './components/Sidebar.vue';
-import store from './store.js';
+import { mapState } from "vuex";
 
 export default {
   components: { Sidebar },
@@ -72,11 +72,14 @@ export default {
       }
   },
   computed: {
+    ...mapState({
+      cart_meals: (state) => state.cart_meals
+    }),
     totalQuantity() {
       let total = 0;
       
-      for(let i in store.cart_meals) {
-        total += store.cart_meals[i].quantity;  
+      for(let i in this.cart_meals) {
+        total += this.cart_meals[i].quantity;  
       }
 
       return total;

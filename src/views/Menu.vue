@@ -32,9 +32,7 @@
 								</a>
 								<input name="quantity" type="text"
 									 class="quantity__input" 
-									 :value="cart_meals.hasOwnProperty(meal.id) ? 
-									 				cart_meals[meal.id].quantity : 
-													0">
+									 :value="quantity(meal.id)">
 								<a @click="increment(meal.id)" class="quantity__plus">
 									<span>+</span>
 								</a>
@@ -51,7 +49,7 @@
 
 <script>
 import axios from 'axios';
-import store from '../store.js';
+import { mapState } from "vuex";
 
 export default {
 	name: "Menu",
@@ -60,31 +58,35 @@ export default {
 			meals: {},
 			mealsByType: {},
 			meals_loaded: false,
-			cart_meals: store.cart_meals,
 		}
 	},
+	computed: {
+		...mapState(['cart_meals']),
+	},
 	methods: {
+		quantity(mealId) {
+			return this.cart_meals.hasOwnProperty(mealId) ? 
+							this.cart_meals[mealId].quantity : 
+							0;
+		},
 		decrement(mealId) {
 			if(this.cart_meals.hasOwnProperty(mealId)) {
-				if(this.cart_meals[mealId].quantity > 1) {
-					this.cart_meals[mealId].quantity--;
-				} else {
-					this.$delete(this.cart_meals, mealId);
-				}
+				if(this.cart_meals[mealId].quantity > 1)
+					this.$store.commit("decrementMeal", mealId);
+				else
+					this.$store.commit("deleteMeal", mealId);
 			}
 		},
 		increment(mealId) {
-			if(!this.cart_meals.hasOwnProperty(mealId)) {
-				this.$set(this.cart_meals, mealId, 
-							{meal: this.meals[mealId], quantity: 0});
-			}
-			this.cart_meals[mealId].quantity++;
+			if(!this.cart_meals.hasOwnProperty(mealId)) 
+				this.$store.commit("addMeal", {"id": mealId, "meal": this.meals[mealId]});
+			
+			this.$store.commit("incrementMeal", mealId);
 		}
 	},
 	async mounted() {
 		const response = await axios.get("https://apifooddelivery.tk/restaurants/" + this.$route.params.id + "/meals");
 
-		//TODO: Is it a good idea to do this here? Maybe in computed?
 		for(let i in response.data) {
 			let meal = response.data[i];
 

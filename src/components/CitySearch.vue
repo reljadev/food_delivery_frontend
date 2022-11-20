@@ -4,7 +4,7 @@
                     :options="options"
                     @change="onChange">
             <template #first>
-                <b-form-select-option :value="{id: null, city: 'Novi Sad'}" disabled>
+                <b-form-select-option :value="{id: null, city: selected.city}" disabled>
                     Please select a city
                 </b-form-select-option>
             </template>
@@ -16,47 +16,59 @@
 </template>
 
 <script>
-    export default {
-        name: "CitySearch",
-        props: ["cities"],
-        data() {
-            return {
-                selected: {id: null, city: 'Novi Sad'},
-            }
-        },
-        methods: {
-            getDefaultCityId() {
-                if(typeof this.cities != 'undefined') {
-                    // default city is Novi Sad
-                    let NoviSadId = null;
-                    for(let i in this.cities) {
-                        // retrieve id of Novi Sad
-                        if(this.cities[i].name === 'Novi Sad') {
-                            NoviSadId = this.cities[i].id;
-                        }
-                    }
-                }
-            },
-            onChange(value) {
-                this.$emit('cityChoosen', value.id);
-            }
-        },
-        computed: {
-            options() {
-                let res = [];
-                
-                if(typeof this.cities != 'undefined') {
-                    // get all cities
-                    for (let i in this.cities) {
-                        res.push({ value: {id: this.cities[i].id, city: this.cities[i].name}, 
-                                    text: this.cities[i].name});
-                    }
-                }
+import axios from 'axios';
 
-                return res;
-            },
+export default {
+    name: "CitySearch",
+    data() {
+        return {
+            cities: [],
+            selected: {id: null, city: ""},
         }
-    }
+    },
+    computed: {
+        options() {
+            let res = [];
+            
+            if(typeof this.cities != 'undefined') {
+                // get all cities
+                for (let i in this.cities) {
+                    res.push({ value: {id: this.cities[i].id, city: this.cities[i].name}, 
+                                text: this.cities[i].name});
+                }
+            }
+
+            return res;
+        },
+    },
+    methods: {
+        getDefaultCityId(cities) {
+            if(typeof cities != 'undefined') {
+                // NOTE: in next iteration of code, we could deduce
+                // default city based on user location, or his history
+                // Here it's assumed that default city is Novi Sad
+                let NoviSadId = null;
+                for(let i in cities) {
+                    // retrieve id of Novi Sad
+                    if(cities[i].name === 'Novi Sad') {
+                        NoviSadId = cities[i].id;
+                        break;
+                    }
+                }
+                this.$store.commit("updateCity", NoviSadId);
+                this.selected.city = "Novi Sad";
+            }
+        },
+        onChange(value) {
+            this.$store.commit("updateCity", value.id);
+        }
+    },
+    mounted: async function() {
+        const response = await axios.get('https://apifooddelivery.tk/cities');
+        this.cities = response.data;
+        this.getDefaultCityId(this.cities);
+    },
+}
 </script>
 
 <style scoped>

@@ -5,11 +5,15 @@
         <b-card v-for="(restaurant, i) in this.restaurants" v-bind:key="restaurant.id"
           :title="restaurant.name"
           class="mb-2">
+          <!-- NOTE: in next iteration of code we should store images on backend
+                      instead of in assets -->
             <b-card-img-lazy 
               :src="require(`@/assets/img/restaurant_covers/${food_imgs[i]}`)"
               offset="0"
               blank-src="../assets/img/placeholder.jpg"/>
             <b-card-text>
+                <!-- NOTE: food tags should be added to backend database,
+                            instead of being hardcoded here -->
                 #burgers #pizza #donught #burek
             </b-card-text>
             <b-button :to="`/restaurants/${restaurant.id}`" variant="primary" float-right class="float-right">
@@ -26,10 +30,13 @@
   
 <script>
 import axios from 'axios';
+import { mapState } from "vuex";
 
 export default {
   name:'RestaurantsList',
-  props: ["cityId"],
+  computed: {
+		...mapState(['cityId']),
+	},
   watch: { 
     cityId: function(newId, oldId) {
       this.fetchRestaurantsByCityId(newId);
@@ -38,6 +45,8 @@ export default {
   data() {
     return {
       restaurants: [],
+      // NOTE: in next iteration of code, we should retrieve
+      // image names from backend, instead of hardcoding them here
       food_imgs: [
         'food1.jpg',
         'food2.jpg',
@@ -60,7 +69,8 @@ export default {
     }
   },
   mounted: async function() {
-    this.fetchRestaurantsByCityId(this.cityId);
+    if(this.cityId !== null)
+      this.fetchRestaurantsByCityId(this.cityId);
   },
 }
 </script>
