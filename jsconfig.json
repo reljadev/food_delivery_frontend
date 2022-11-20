@@ -1,0 +1,6 @@
+// This config file is used by VS code, for JavaScript projects
+{
+    "vueCompilerOptions": {
+        "target": 2,
+    }
+}
